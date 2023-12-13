@@ -8,7 +8,6 @@ dl_path:
 src_files:
   - files/index.yaml
   - files/Makefile
-  - files/metadata.yaml
   - files/repositories.yaml
 revision:
   dist: $STX_DIST

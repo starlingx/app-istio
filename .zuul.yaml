@@ -5,11 +5,15 @@
         - openstack-tox-linters
         - k8sapp-istio-tox-py39
         - k8sapp-istio-tox-pylint
+        - k8sapp-istio-tox-flake8
+        - k8sapp-istio-tox-metadata
     gate:
       jobs:
         - openstack-tox-linters
         - k8sapp-istio-tox-py39
         - k8sapp-istio-tox-pylint
+        - k8sapp-istio-tox-flake8
+        - k8sapp-istio-tox-metadata
     post:
       jobs:
         - stx-app-istio-upload-git-mirror
@@ -25,24 +29,33 @@
       - starlingx/fault
       - starlingx/update
       - starlingx/utilities
+      - starlingx/root
     files:
       - python3-k8sapp-istio/*
     vars:
         tox_envlist: py39
         python_version: 3.9
         tox_extra_args: -c python3-k8sapp-istio/k8sapp_istio/tox.ini
+        tox_constraints_file: '{{ ansible_user_dir }}/src/opendev.org/starlingx/root/build-tools/requirements/debian/upper-constraints.txt'
+
 - job:
-    name: stx-app-istio-upload-git-mirror
-    parent: upload-git-mirror
-    description: >
-      Mirrors opendev.org/starlingx/app-istio to
-      github.com/starlingx/app-istio
+    name: k8sapp-istio-tox-metadata
+    parent: tox
+    description: |
+      Run metadata test for k8sapp_istio
+    nodeset: debian-bullseye
+    required-projects:
+      - starlingx/config
+      - starlingx/fault
+      - starlingx/update
+      - starlingx/utilities
+      - starlingx/root
+    files:
+      - python3-k8sapp-istio/*
     vars:
-      git_mirror_repository: starlingx/app-istio
-    secrets:
-      - name: git_mirror_credentials
-        secret: stx-app-istio-github-secret2
-        pass-to-parent: true
+      tox_envlist: metadata
+      tox_extra_args: -c python3-k8sapp-istio/k8sapp_istio/tox.ini
+      tox_constraints_file: '{{ ansible_user_dir }}/src/opendev.org/starlingx/root/build-tools/requirements/debian/upper-constraints.txt'
 
 - job:
     name: k8sapp-istio-tox-pylint
@@ -55,11 +68,45 @@
       - starlingx/fault
       - starlingx/update
       - starlingx/utilities
+      - starlingx/root
     files:
       - python3-k8sapp-istio/*
     vars:
       tox_envlist: pylint
       tox_extra_args: -c python3-k8sapp-istio/k8sapp_istio/tox.ini
+      tox_constraints_file: '{{ ansible_user_dir }}/src/opendev.org/starlingx/root/build-tools/requirements/debian/upper-constraints.txt'
+
+- job:
+    name: k8sapp-istio-tox-flake8
+    parent: tox
+    description: |
+      Run flake8 test for k8sapp_istio
+    nodeset: debian-bullseye
+    required-projects:
+      - starlingx/config
+      - starlingx/fault
+      - starlingx/update
+      - starlingx/utilities
+      - starlingx/root
+    files:
+      - python3-k8sapp-istio/*
+    vars:
+      tox_envlist: flake8
+      tox_extra_args: -c python3-k8sapp-istio/k8sapp_istio/tox.ini
+      tox_constraints_file: '{{ ansible_user_dir }}/src/opendev.org/starlingx/root/build-tools/requirements/debian/upper-constraints.txt'
+
+- job:
+    name: stx-app-istio-upload-git-mirror
+    parent: upload-git-mirror
+    description: >
+      Mirrors opendev.org/starlingx/app-istio to
+      github.com/starlingx/app-istio
+    vars:
+      git_mirror_repository: starlingx/app-istio
+    secrets:
+      - name: git_mirror_credentials
+        secret: stx-app-istio-github-secret2
+        pass-to-parent: true
 
 - secret:
     name: stx-app-istio-github-secret2

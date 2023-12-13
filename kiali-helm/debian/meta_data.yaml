@@ -8,7 +8,6 @@ dl_path:
   sha256sum: 8b85fec1a95ce4543ccac544ca98cb91e22ad8a42a30930a92ff21ef240ecf7a
 src_files:
   - files/index.yaml
-  - files/metadata.yaml
   - files/repositories.yaml
 revision:
   dist: $STX_DIST
