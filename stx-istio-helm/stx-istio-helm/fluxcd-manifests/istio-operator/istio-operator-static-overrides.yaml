@@ -1,18 +1,18 @@
 #
-# Copyright (c) 2022 Wind River Systems, Inc.
+# Copyright (c) 2024 Wind River Systems, Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
 
 hub: registry.local:9001/docker.io/istio
-tag: 1.17.2
+tag: 1.19.4
 replicaCount: 1
 images:
   tags:
-    istio-operator: docker.io/istio/operator:1.17.2
-    cni: docker.io/istio/install-cni:1.17.2
-    pilot: docker.io/istio/pilot:1.17.2
-    proxyv2: docker.io/istio/proxyv2:1.17.2
+    istio-operator: docker.io/istio/operator:1.19.4
+    cni: docker.io/istio/install-cni:1.19.4
+    pilot: docker.io/istio/pilot:1.19.4
+    proxyv2: docker.io/istio/proxyv2:1.19.4
 
 # ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
 # used to pull operator image. Must be set for any cluster configured with private docker registry.

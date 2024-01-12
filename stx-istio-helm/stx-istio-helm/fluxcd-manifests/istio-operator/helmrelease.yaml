@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2022 Wind River Systems, Inc.
+# Copyright (c) 2024 Wind River Systems, Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -15,7 +15,7 @@ spec:
   chart:
     spec:
       chart: istio-operator 
-      version: 1.17.2
+      version: 1.19.4
       sourceRef:
         kind: HelmRepository
         name: stx-platform
