@@ -2,10 +2,10 @@
 debname: kiali-helm
 debver: 1.0-1
 dl_path:
-  name: helm-charts-kiali-1.66.0.tar.gz
-  url: https://github.com/kiali/helm-charts/archive/refs/tags/v1.66.0.tar.gz
-  md5sum: 44f005b5d2fcd9a94d2ae1c65fc4bb95
-  sha256sum: 8b85fec1a95ce4543ccac544ca98cb91e22ad8a42a30930a92ff21ef240ecf7a
+  name: helm-charts-kiali-1.75.0.tar.gz
+  url: https://github.com/kiali/helm-charts/archive/refs/tags/v1.75.0.tar.gz
+  md5sum: a17439c758fee987372588b7f664f9e6
+  sha256sum: 3273056128742685a869e0d8dca8fca57651407810be7b61e5b49742f3120c55
 src_files:
   - files/index.yaml
   - files/repositories.yaml

@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2022 Wind River Systems, Inc.
+# Copyright (c) 2024 Wind River Systems, Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -8,10 +8,10 @@ replicaCount: 1
 namespace: istio-system
 images:
   tags:
-    kiali: quay.io/kiali/kiali:v1.66.0
+    kiali: quay.io/kiali/kiali:v1.75.0
 deployment:
   image_name: registry.local:9001/quay.io/kiali/kiali
   image_pull_secrets: ["default-registry-key"]
-  image_version: v1.66.0
-  version_label: v1.66.0
+  image_version: v1.75.0
+  version_label: v1.75.0
   service_type: NodePort
