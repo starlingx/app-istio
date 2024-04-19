@@ -5,10 +5,6 @@ Maintainer: StarlingX Developers <starlingx-discuss@lists.starlingx.io>
 Build-Depends: debhelper-compat (= 13),
  istio-helm,
  kiali-helm,
- chartmuseum,
- helm,
- procps,
- python3-k8sapp-istio,
  python3-k8sapp-istio-wheels,
  build-info
 Standards-Version: 4.5.1
@@ -19,4 +15,4 @@ Section: libs
 Architecture: any
 Depends: ${misc:Depends}
 Description: StarlingX Istio Helm Charts
- This package contains helm charts for the Istio application.
+ This package contains manifests for the Istio application.

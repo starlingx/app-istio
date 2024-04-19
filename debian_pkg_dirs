@@ -1,4 +1,4 @@
-istio-helm
-kiali-helm
+helm-charts/upstream/istio-helm
+helm-charts/upstream/kiali-helm
 python3-k8sapp-istio
 stx-istio-helm

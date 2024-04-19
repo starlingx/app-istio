@@ -3,7 +3,7 @@ Upstream-Name: kiali-helm
 Source: https://opendev.org/starlingx/app-istio/
 
 Files: *
-Copyright: (c) 2013-2022 Wind River Systems, Inc
+Copyright: (c) 2024 Wind River Systems, Inc
 License: Apache-2
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.

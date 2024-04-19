@@ -1,3 +1,9 @@
+stx-istio-helm (1.0-2) unstable; urgency=medium
+
+  * Update package to automatically version itself
+
+ -- Aman Pandae <amanpandae.mothukuri@windriver.com> Tue, 30 Apr 2024 08:00:00 +0000
+
 stx-istio-helm (1.0-1) unstable; urgency=medium
 
   * Initial release.

@@ -1,0 +1,5 @@
+istio-helm (1.19-4) unstable; urgency=medium
+
+  * Auto-increment chart version
+
+ --  Aman Pandae <amanpandae.mothukuri@windriver.com>  Thu, 2 May 2024 07:00:00 +0000

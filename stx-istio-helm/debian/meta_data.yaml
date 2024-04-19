@@ -1,6 +1,6 @@
 ---
 debname: stx-istio-helm
-debver: 1.0-1
+debver: 1.0-2
 src_path: stx-istio-helm
 revision:
   dist: $STX_DIST
