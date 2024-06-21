@@ -5,14 +5,14 @@
 #
 
 hub: registry.local:9001/docker.io/istio
-tag: 1.19.4
+tag: 1.22.1
 replicaCount: 1
 images:
   tags:
-    istio-operator: docker.io/istio/operator:1.19.4
-    cni: docker.io/istio/install-cni:1.19.4
-    pilot: docker.io/istio/pilot:1.19.4
-    proxyv2: docker.io/istio/proxyv2:1.19.4
+    istio-operator: docker.io/istio/operator:1.22.1
+    cni: docker.io/istio/install-cni:1.22.1
+    pilot: docker.io/istio/pilot:1.22.1
+    proxyv2: docker.io/istio/proxyv2:1.22.1
 
 # ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
 # used to pull operator image. Must be set for any cluster configured with private docker registry.
