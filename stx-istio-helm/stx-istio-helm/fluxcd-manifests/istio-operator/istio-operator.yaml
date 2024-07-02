@@ -21,13 +21,13 @@ spec:
         - kube-system
         - istio-operator
         - istio-system
-      image: registry.local:9001/docker.io/istio/install-cni:1.19.4
+      image: registry.local:9001/docker.io/istio/install-cni:1.22.1
     pilot:
-      image: registry.local:9001/docker.io/istio/pilot:1.19.4
+      image: registry.local:9001/docker.io/istio/pilot:1.22.1
     global:
       imagePullSecrets:
         - default-registry-key
       proxy:
-        image: registry.local:9001/docker.io/istio/proxyv2:1.19.4
+        image: registry.local:9001/docker.io/istio/proxyv2:1.22.1
       proxy_init:
-        image: registry.local:9001/docker.io/istio/proxyv2:1.19.4
+        image: registry.local:9001/docker.io/istio/proxyv2:1.22.1

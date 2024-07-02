@@ -1,10 +1,10 @@
 ---
 debname: istio-helm
-debver: 1.19-4
+debver: 1.22-1
 dl_path:
-  name: helm-charts-istio-1.19.4.tar.gz
-  url: https://github.com/istio/istio/archive/refs/tags/1.19.4.tar.gz
-  sha256sum: 5a3a1b8c5d0092a00d1b19247cbd066307ddff1bc8f8c2551a97cc8e36035a79
+  name: helm-charts-istio-1.22.1.tar.gz
+  url: https://github.com/istio/istio/archive/refs/tags/1.22.1.tar.gz
+  sha256sum: 053e121a56aac7a75fbbfcab3332efe1b1577385b7b2e17f94d857f6bacbee29
 src_files:
   - files/Makefile
 revision:
