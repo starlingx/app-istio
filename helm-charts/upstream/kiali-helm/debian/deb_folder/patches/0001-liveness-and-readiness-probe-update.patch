@@ -1,0 +1,83 @@
+From 8b27e3ef12e131c9c8f413f0faae3d563fcbc650 Mon Sep 17 00:00:00 2001
+From: Md Irshad Sheikh <mdirshad.sheikh@windriver.com>
+Date: Tue, 3 Sep 2024 10:03:39 -0400
+Subject: [PATCH] liveness-and-readiness-probe-update
+
+---
+ kiali-server/templates/deployment.yaml | 14 ++++++++++----
+ kiali-server/values.yaml               | 12 ++++++++++++
+ 2 files changed, 22 insertions(+), 4 deletions(-)
+
+diff --git a/kiali-server/templates/deployment.yaml b/kiali-server/templates/deployment.yaml
+index 172dbcd..e8a2b9c 100644
+--- a/kiali-server/templates/deployment.yaml
++++ b/kiali-server/templates/deployment.yaml
+@@ -89,6 +89,7 @@ spec:
+           containerPort: {{ .Values.server.observability.metrics.port | default 9090 }}
+         {{- end }}
+         readinessProbe:
++          failureThreshold: {{ .Values.deployment.readinessProbe.failureThreshold }}
+           httpGet:
+             path: {{ include "kiali-server.server.web_root" . | trimSuffix "/"  }}/healthz
+             port: api-port
+@@ -97,9 +98,12 @@ spec:
+             {{- else }}
+             scheme: HTTP
+             {{- end }}
+-          initialDelaySeconds: 5
+-          periodSeconds: 30
++          initialDelaySeconds: {{ .Values.deployment.readinessProbe.initialDelaySeconds }}
++          periodSeconds: {{ .Values.deployment.readinessProbe.periodSeconds }}
++          successThreshold: {{ .Values.deployment.readinessProbe.successThreshold }}
++          timeoutSeconds: {{ .Values.deployment.readinessProbe.timeoutSeconds }}
+         livenessProbe:
++          failureThreshold: {{ .Values.deployment.livenessProbe.failureThreshold }}
+           httpGet:
+             path: {{ include "kiali-server.server.web_root" . | trimSuffix "/"  }}/healthz
+             port: api-port
+@@ -108,8 +112,10 @@ spec:
+             {{- else }}
+             scheme: HTTP
+             {{- end }}
+-          initialDelaySeconds: 5
+-          periodSeconds: 30
++          initialDelaySeconds: {{ .Values.deployment.livenessProbe.initialDelaySeconds }}
++          periodSeconds: {{ .Values.deployment.livenessProbe.periodSeconds }}
++          successThreshold: {{ .Values.deployment.livenessProbe.successThreshold }}
++          timeoutSeconds: {{ .Values.deployment.livenessProbe.timeoutSeconds }}
+         env:
+         - name: ACTIVE_NAMESPACE
+           valueFrom:
+diff --git a/kiali-server/values.yaml b/kiali-server/values.yaml
+index 51de0f5..6e68ff0 100644
+--- a/kiali-server/values.yaml
++++ b/kiali-server/values.yaml
+@@ -67,6 +67,12 @@ deployment:
+     override_yaml:
+       metadata: {}
+   instance_name: "kiali"
++  livenessProbe:
++    failureThreshold: 3
++    initialDelaySeconds: 5
++    periodSeconds: 30
++    successThreshold: 1
++    timeoutSeconds: 5
+   logger:
+     log_format: "text"
+     log_level: "info"
+@@ -76,6 +82,12 @@ deployment:
+   pod_annotations: {}
+   pod_labels: {}
+   priority_class_name: ""
++  readinessProbe:
++    failureThreshold: 3
++    initialDelaySeconds: 5
++    periodSeconds: 30
++    successThreshold: 1
++    timeoutSeconds: 5
+   replicas: 1
+   resources:
+     requests:
+-- 
+2.25.1
+

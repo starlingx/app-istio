@@ -2,7 +2,7 @@ istio-helm (1.22-1) unstable; urgency=medium
 
   * Update istio chart version
 
- --  Sirin Shaikh <sirin.shaikh@windriver.com>  Thu, 20 June 2024 09:17:09 +0000
+ --  Sirin Shaikh <sirin.shaikh@windriver.com>  Thu, 20 Jun 2024 09:17:09 +0000
 
 istio-helm (1.19-4) unstable; urgency=medium
 
