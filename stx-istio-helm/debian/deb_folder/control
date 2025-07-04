@@ -3,7 +3,11 @@ Section: libs
 Priority: optional
 Maintainer: StarlingX Developers <starlingx-discuss@lists.starlingx.io>
 Build-Depends: debhelper-compat (= 13),
- istio-helm,
+ istio-base-helm,
+ istio-cni-helm,
+ istio-pilot-helm,
+ istio-ingressgateway-helm,
+ istio-egressgateway-helm,
  kiali-helm,
  python3-k8sapp-istio-wheels,
  build-info

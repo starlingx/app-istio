@@ -1,0 +1,29 @@
+#
+# Copyright (c) 2025 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+pilot:
+  enabled: true
+  image: registry.local:9001/docker.io/istio/pilot:1.22.1
+  cni:
+    enabled: true
+  k8s:
+    readinessProbe:
+      failureThreshold: 30
+      initialDelaySeconds: 1
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+
+sidecarInjectorWebhook:
+  injectedAnnotations:
+    k8s.v1.cni.cncf.io/networks: istio-cni
+global:
+  imagePullSecrets:
+    - default-registry-key
+  proxy:
+    image: registry.local:9001/docker.io/istio/proxyv2:1.22.1
+  proxy_init:
+    image: registry.local:9001/docker.io/istio/proxyv2:1.22.1

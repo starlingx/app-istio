@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2022-2023 Wind River Systems, Inc.
+# Copyright (c) 2022-2025 Wind River Systems, Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -39,21 +39,18 @@ class IstioAppLifecycleOperator(base.AppLifecycleOperator):
                 if hook_info.relative_timing == LifecycleConstants.APP_LIFECYCLE_TIMING_POST:
                     return self.post_apply(app_op, app, hook_info)
 
-        if hook_info.lifecycle_type == LifecycleConstants.APP_LIFECYCLE_TYPE_OPERATION:
-            if hook_info.operation == constants.APP_REMOVE_OP:
+        if hook_info.lifecycle_type == LifecycleConstants.APP_LIFECYCLE_TYPE_RESOURCE:
+            if hook_info.operation == constants.APP_UPDATE_OP:
                 if hook_info.relative_timing == LifecycleConstants.APP_LIFECYCLE_TIMING_PRE:
-                    return self.pre_remove(app)
-
-        if hook_info.lifecycle_type == LifecycleConstants.APP_LIFECYCLE_TYPE_OPERATION:
-            if hook_info.operation == constants.APP_REMOVE_OP:
-                if hook_info.relative_timing == LifecycleConstants.APP_LIFECYCLE_TIMING_POST:
-                    return self.post_remove(app)
+                    return self.pre_update(app)
 
         super(IstioAppLifecycleOperator, self).app_lifecycle_actions(
             context, conductor_obj, app_op, app, hook_info
         )
 
     def post_apply(self, app_op, app, hook_info):
+        LOG.info(
+            "Application apply is being called for {} app".format(app_constants.HELM_APP_ISTIO))
         if LifecycleConstants.EXTRA not in hook_info:
             raise exception.LifecycleMissingInfo("Missing {}".format(LifecycleConstants.EXTRA))
         if LifecycleConstants.RETURN_CODE not in hook_info[LifecycleConstants.EXTRA]:
@@ -109,44 +106,42 @@ class IstioAppLifecycleOperator(base.AppLifecycleOperator):
         if old_namespace_label != namespace_label:
             self._delete_istio_pods(app_op, client_core)
 
-    def pre_remove(self, app):
-        LOG.debug(
-            "Executing pre_remove for {} app".format(app_constants.HELM_APP_ISTIO)
+    def pre_update(self, app):
+        LOG.info(
+            "Executing pre_update for {} app".format(app_constants.HELM_APP_ISTIO)
         )
+        # Delete istio-operator.yaml if it exists
+        # Scenario of Istio App Update:-
+        #  v1 - Istio Operator exists in the fluxcd manifests
+        #  v2 - Istio Operator is deprecated and not needed anymore
+        #  App is updated from v1 to v2, Old istio-operator.yaml is not needed
+        #  This takes care of Kubernetes deployment of Istio Operator
+        #  Old Manifests files removal is handled in sysinv, conductor/kube_app.py
         yfile = os.path.join(app.sync_fluxcd_manifest, 'istio-operator/istio-operator.yaml')
         if os.path.exists(yfile):
             cmd = ['kubectl', '--kubeconfig', kubernetes.KUBERNETES_ADMIN_CONF,
-                   'delete', '-f', yfile]
+                   'delete', '-f', yfile, "--request-timeout=30s"]
             stdout, stderr = cutils.trycmd(*cmd)
-            LOG.debug("{} app: cmd={} stdout={} stderr={}".format(app.name, cmd, stdout, stderr))
-
-        # Comment out istio-operator.yaml in the kustomization.yaml
+            LOG.info("{} app: cmd={} stdout={} stderr={}".format(app.name, cmd, stdout, stderr))
+        # Comment out istio-operator.yaml in the kustomization.yaml if it exists
         kust_file = os.path.join(app.sync_fluxcd_manifest, 'istio-operator/kustomization.yaml')
-        cmd = ['sed', '-i', '/istio-operator.yaml/s/^/#/g', kust_file]
-        stdout, stderr = cutils.trycmd(*cmd)
-        LOG.debug("{} app: cmd={} stdout={} stderr={}".format(app.name, cmd, stdout, stderr))
-
-    def post_remove(self, app):
-        LOG.debug(
-            "Executing post_remove for {} app".format(app_constants.HELM_APP_ISTIO)
-        )
-        # Uncomment istio-operator.yaml in the kustomization.yaml
-        kust_file = os.path.join(app.sync_fluxcd_manifest, 'istio-operator/kustomization.yaml')
-        cmd = ['sed', '-i', '/istio-operator.yaml/s/^#//g', kust_file]
-        stdout, stderr = cutils.trycmd(*cmd)
-        LOG.debug("{} app: post_remove cmd={} stdout={} stderr={}".format(app.name, cmd, stdout, stderr))
+        if os.path.exists(kust_file):
+            cmd = ['sed', '-i', '/istio-operator.yaml/s/^/#/g', kust_file]
+            stdout, stderr = cutils.trycmd(*cmd)
+            LOG.info("{} app: cmd={} stdout={} stderr={}".format(app.name, cmd, stdout, stderr))
+        self.remove_finalizers_crd()
 
     def _get_helm_user_overrides(self, dbapi_instance, db_app_id):
         try:
             overrides = dbapi_instance.helm_override_get(
                 app_id=db_app_id,
-                name=app_constants.HELM_CHART_ISTIO_OPERATOR,
+                name=app_constants.HELM_CHART_ISTIO_BASE,
                 namespace=app_constants.HELM_NS_ISTIO_SYSTEM,
             )
         except exception.HelmOverrideNotFound:
             values = {
-                "name": app_constants.HELM_CHART_ISTIO_OPERATOR,
-                "namespace": app_constants.HELM_NS_ISTIO_OPERATOR,
+                "name": app_constants.HELM_CHART_ISTIO_BASE,
+                "namespace": app_constants.HELM_NS_ISTIO_SYSTEM,
                 "db_app_id": db_app_id,
             }
             overrides = dbapi_instance.helm_override_create(values=values)
@@ -163,3 +158,43 @@ class IstioAppLifecycleOperator(base.AppLifecycleOperator):
                 namespace=app_constants.HELM_NS_ISTIO_SYSTEM,
                 grace_periods_seconds=0
             )
+
+    def remove_finalizers_crd(self):
+        """ Remove finalizers from CustomResourceDefinitions (CRDs)
+
+        This function removes finalizers from istio-operator CRD
+        Needed in case of Application update from N to N+1 where
+        N is dependent on istio-operator and
+        N+1 is not dependent on istio-operator.
+        This is needed to avoid the istio-operator CRD being stuck in
+        terminating state.
+        """
+        # Get crd of istiooperator.install.istio.io example-istiocontrolplane
+        cmd_crds = ["kubectl", "--kubeconfig", kubernetes.KUBERNETES_ADMIN_CONF, "get", "crd",
+                    "-o=jsonpath='{.items[?(@.spec.group==\"install.istio.io\")].metadata.name}'"]
+
+        stdout, stderr = cutils.trycmd(*cmd_crds)
+        if not stderr:
+            LOG.info("Removing finalizer from istio-system CRD {}".format(stdout))
+            crds = stdout.replace("'", "").strip().split(" ")
+            for crd_name in crds:
+                # Get custom resources based on each istio-system CRD
+                cmd_instances = ["kubectl", "--kubeconfig", kubernetes.KUBERNETES_ADMIN_CONF,
+                                 "get", "-n", "istio-system", crd_name,
+                                 "-o", "name", "--request-timeout=10s"]
+                stdout, stderr = cutils.trycmd(*cmd_instances)
+                crd_instances = stdout.strip().split("\n")
+                if not stderr and crd_instances:
+                    for crd_instance in crd_instances:
+                        if crd_instance:
+                            # Patch each custom resource to remove finalizers
+                            patch_cmd = ["kubectl",
+                                         "--kubeconfig", kubernetes.KUBERNETES_ADMIN_CONF,
+                                         "patch", "-n", "istio-system", crd_instance,
+                                         "--type=json",
+                                         "-p", '[{"op": "remove", "path": "/metadata/finalizers"}]',
+                                         "--request-timeout=10s"]
+                            stdout, stderr = cutils.trycmd(*patch_cmd)
+                            LOG.debug(f"{crd_instance} \n stdout: {stdout} \n stderr: {stderr}")
+        else:
+            LOG.error("Error removing finalizers: {stderr}")

@@ -1,0 +1,5 @@
+istio-base-helm (1.22-1) unstable; urgency=medium
+
+  * Initial Release, removing dependency on Istio Operator
+
+ --  Aman Pandae <amanpandae.mothukuri@windriver.com>  Fri, 04 Jul 2025 06:42:17 +0000

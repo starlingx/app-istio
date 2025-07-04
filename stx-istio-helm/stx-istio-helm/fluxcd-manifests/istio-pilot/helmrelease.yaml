@@ -1,0 +1,39 @@
+#
+# Copyright (c) 2025 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+apiVersion: "helm.toolkit.fluxcd.io/v2"
+kind: HelmRelease
+metadata:
+  name: istiod
+  labels:
+    chart_group: istio-charts
+spec:
+  releaseName: istio-istio-pilot
+  chart:
+    spec:
+      chart: istiod
+      version: REPLACE_HELM_CHART_VERSION
+      sourceRef:
+        kind: HelmRepository
+        name: stx-platform
+  interval: 1m
+  timeout: 30m
+  test:
+    enable: false
+  install:
+    disableHooks: false
+  upgrade:
+    disableHooks: false
+  dependsOn:
+    - name: cni
+      namespace: istio-system
+  valuesFrom:
+    - kind: Secret
+      name: istio-pilot-static-overrides
+      valuesKey: istio-pilot-static-overrides.yaml
+    - kind: Secret
+      name: istio-pilot-system-overrides
+      valuesKey: istio-pilot-system-overrides.yaml

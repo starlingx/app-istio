@@ -1,0 +1,15 @@
+---
+debname: istio-base-helm
+debver: 1.22-1
+dl_path:
+  name: helm-charts-istio-base-1.22.1.tar.gz
+  url: https://storage.googleapis.com/istio-release/releases/1.22.1/helm/base-1.22.1.tgz
+  sha256sum: ca4f2267f3e63b77a5813f40531f67cbda8232ed1406730a876af2b05c97d8b3
+src_files:
+  - files/Makefile
+revision:
+  dist: $STX_DIST
+  stx_patch: -1
+  GITREVCOUNT:
+    SRC_DIR: ${MY_REPO}/stx/app-istio/helm-charts/upstream/istio-base-helm
+    BASE_SRCREV: c475992c932268dcf7fe197c693512190781ff29

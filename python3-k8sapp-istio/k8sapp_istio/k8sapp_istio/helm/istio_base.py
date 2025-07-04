@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2022-2025 Wind River Systems, Inc.
+# Copyright (c) 2025 Wind River Systems, Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -10,21 +10,21 @@ from sysinv.helm import base
 from k8sapp_istio.common import constants as app_constants
 
 
-class KialiHelm(base.FluxCDBaseHelm):
-    """Class to encapsulate helm operations for the Kiali chart"""
+class IstioBaseHelm(base.FluxCDBaseHelm):
+    """Class to encapsulate helm operations for the istio-base chart"""
 
     SUPPORTED_NAMESPACES = base.BaseHelm.SUPPORTED_NAMESPACES + \
         [app_constants.HELM_NS_ISTIO_SYSTEM]
     SUPPORTED_APP_NAMESPACES = {
         app_constants.HELM_APP_ISTIO:
             base.BaseHelm.SUPPORTED_NAMESPACES +
-            [app_constants.HELM_NS_ISTIO_SYSTEM],
+            [app_constants.HELM_NS_ISTIO_SYSTEM]
     }
 
-    CHART = app_constants.HELM_CHART_KIALI_SERVER
+    CHART = app_constants.HELM_CHART_ISTIO_BASE
 
     SERVICE_NAME = app_constants.HELM_APP_ISTIO
-    HELM_RELEASE = app_constants.HELM_CHART_KIALI_SERVER
+    HELM_RELEASE = app_constants.HELM_CHART_ISTIO_BASE
 
     def _is_enabled(self, app_name, chart_name, namespace):
         """
@@ -37,7 +37,7 @@ class KialiHelm(base.FluxCDBaseHelm):
         Returns true by default if an exception occurs as most charts are
         enabled.
         """
-        return super(KialiHelm, self)._is_enabled(
+        return super(IstioBaseHelm, self)._is_enabled(
             app_name, chart_name, namespace)
 
     def execute_kustomize_updates(self, operator):
