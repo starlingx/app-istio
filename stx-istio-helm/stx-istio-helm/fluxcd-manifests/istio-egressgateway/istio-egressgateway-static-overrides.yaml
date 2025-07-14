@@ -18,6 +18,6 @@ global:
   imagePullSecrets:
     - default-registry-key
   proxy:
-    image: registry.local:9001/docker.io/istio/proxyv2:1.22.1
+    image: docker.io/istio/proxyv2:1.26.2
   proxy_init:
-    image: registry.local:9001/docker.io/istio/proxyv2:1.22.1
+    image: docker.io/istio/proxyv2:1.26.2

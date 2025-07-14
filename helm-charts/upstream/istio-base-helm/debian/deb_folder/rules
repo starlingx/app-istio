@@ -20,7 +20,6 @@ override_dh_auto_build:
 	cp Chart.yaml istio-base
 	cp values.yaml istio-base
 	cp -r templates istio-base
-	cp -r crds istio-base
 	cp -r files istio-base
 
 	# Create the tar file for the chart

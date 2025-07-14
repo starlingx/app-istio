@@ -1,10 +1,10 @@
 ---
 debname: istio-ingressgateway-helm
-debver: 1.22-1
+debver: 1.26-2
 dl_path:
-  name: helm-charts-istio-ingressgateway-1.22.1.tar.gz
-  url: https://github.com/istio/istio/archive/refs/tags/1.22.1.tar.gz
-  sha256sum: 053e121a56aac7a75fbbfcab3332efe1b1577385b7b2e17f94d857f6bacbee29
+  name: helm-charts-istio-ingressgateway-1.26.2.tar.gz
+  url: https://github.com/istio/istio/archive/refs/tags/1.26.2.tar.gz
+  sha256sum: fb3b3569165e8b1cf01c676b7ce9a903abf730446df7e2753f436072aefbfd5e
 src_files:
   - files/Makefile
 revision:

@@ -1,0 +1,63 @@
+From 896a4f5483a5d4078acb2d4d5b771a4cc6a807e2 Mon Sep 17 00:00:00 2001
+From: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
+Date: Fri, 8 Aug 2025 00:10:47 -0400
+Subject: [PATCH] liveness-and-readiness-probes-update
+
+---
+ kiali-server/templates/deployment.yaml | 6 ++++++
+ kiali-server/values.yaml               | 6 ++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/kiali-server/templates/deployment.yaml b/kiali-server/templates/deployment.yaml
+index 9fc3d3b..81bcedc 100644
+--- a/kiali-server/templates/deployment.yaml
++++ b/kiali-server/templates/deployment.yaml
+@@ -101,8 +101,11 @@ spec:
+             {{- else }}
+             scheme: HTTP
+             {{- end }}
++          failureThreshold: {{ .Values.deployment.probes.readiness.failure_threshold | int | default 3 }}
+           initialDelaySeconds: {{ .Values.deployment.probes.readiness.initial_delay_seconds | int | default 5 }}
+           periodSeconds: {{ .Values.deployment.probes.readiness.period_seconds | int | default 30 }}
++          successThreshold: {{ .Values.deployment.probes.readiness.success_threshold | int | default 1 }}
++          timeoutSeconds: {{ .Values.deployment.probes.readiness.timeout_seconds | int | default 5 }}
+         livenessProbe:
+           httpGet:
+             path: {{ include "kiali-server.server.web_root" . | trimSuffix "/"  }}/healthz
+@@ -112,8 +115,11 @@ spec:
+             {{- else }}
+             scheme: HTTP
+             {{- end }}
++          failureThreshold: {{ .Values.deployment.probes.liveness.failure_threshold | int | default 3 }}
+           initialDelaySeconds: {{ .Values.deployment.probes.liveness.initial_delay_seconds | int | default 5 }}
+           periodSeconds: {{ .Values.deployment.probes.liveness.period_seconds | int | default 30 }}
++          successThreshold: {{ .Values.deployment.probes.liveness.success_threshold | int | default 1 }}
++          timeoutSeconds: {{ .Values.deployment.probes.liveness.timeout_seconds | int | default 5 }}
+         startupProbe:
+           httpGet:
+             path: {{ include "kiali-server.server.web_root" . | trimSuffix "/"  }}/healthz
+diff --git a/kiali-server/values.yaml b/kiali-server/values.yaml
+index 3c06887..606ef9c 100644
+--- a/kiali-server/values.yaml
++++ b/kiali-server/values.yaml
+@@ -73,11 +73,17 @@ deployment:
+   priority_class_name: ""
+   probes:
+     liveness:
++      failure_threshold: 3
+       initial_delay_seconds: 5
+       period_seconds: 30
++      success_threshold: 1
++      timeout_seconds: 5
+     readiness:
++      failure_threshold: 3
+       initial_delay_seconds: 5
+       period_seconds: 30
++      success_threshold: 1
++      timeout_seconds: 5
+     startup:
+       failure_threshold: 6
+       initial_delay_seconds: 30
+-- 
+2.34.1
+

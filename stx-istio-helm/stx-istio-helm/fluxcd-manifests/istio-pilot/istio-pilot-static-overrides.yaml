@@ -6,7 +6,7 @@
 
 pilot:
   enabled: true
-  image: registry.local:9001/docker.io/istio/pilot:1.22.1
+  image: docker.io/istio/pilot:1.26.2
   cni:
     enabled: true
   k8s:
@@ -24,6 +24,6 @@ global:
   imagePullSecrets:
     - default-registry-key
   proxy:
-    image: registry.local:9001/docker.io/istio/proxyv2:1.22.1
+    image: docker.io/istio/proxyv2:1.26.2
   proxy_init:
-    image: registry.local:9001/docker.io/istio/proxyv2:1.22.1
+    image: docker.io/istio/proxyv2:1.26.2
