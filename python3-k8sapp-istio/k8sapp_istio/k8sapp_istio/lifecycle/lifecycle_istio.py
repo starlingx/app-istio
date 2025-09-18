@@ -129,6 +129,14 @@ class IstioAppLifecycleOperator(base.AppLifecycleOperator):
             cmd = ['sed', '-i', '/istio-operator.yaml/s/^/#/g', kust_file]
             stdout, stderr = cutils.trycmd(*cmd)
             LOG.info("{} app: cmd={} stdout={} stderr={}".format(app.name, cmd, stdout, stderr))
+        cmd_helm_release = ["kubectl", "--kubeconfig", kubernetes.KUBERNETES_ADMIN_CONF,
+                            "patch", "helmrelease", "istio-operator",
+                            "-n", "istio-system",
+                            "--type=merge", "--field-manager=flux-client-side-apply",
+                            "-p", '{"spec": {"suspend": true}}', "--request-timeout=10s"]
+        stdout, stderr = cutils.trycmd(*cmd_helm_release)
+        LOG.info("{} app: cmd={} stdout={} stderr={}".format(app.name, cmd_helm_release,
+                                                            stdout, stderr))
         self.remove_finalizers_crd()
 
     def _get_helm_user_overrides(self, dbapi_instance, db_app_id):
