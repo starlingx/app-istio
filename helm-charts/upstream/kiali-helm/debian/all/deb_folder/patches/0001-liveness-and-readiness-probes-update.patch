@@ -1,63 +1,70 @@
-From 896a4f5483a5d4078acb2d4d5b771a4cc6a807e2 Mon Sep 17 00:00:00 2001
-From: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
-Date: Fri, 8 Aug 2025 00:10:47 -0400
+From 1b2d52206769bfc25506dc40dcdab2c25255cbb5 Mon Sep 17 00:00:00 2001
+From: Test User <test@example.com>
+Date: Fri, 5 Dec 2025 16:36:57 -0300
 Subject: [PATCH] liveness-and-readiness-probes-update
 
 ---
- kiali-server/templates/deployment.yaml | 6 ++++++
- kiali-server/values.yaml               | 6 ++++++
- 2 files changed, 12 insertions(+)
+ kiali-server/templates/deployment.yaml |  6 ++++++
+ kiali-server/values.yaml               | 12 +++++++++---
+ 2 files changed, 15 insertions(+), 3 deletions(-)
 
 diff --git a/kiali-server/templates/deployment.yaml b/kiali-server/templates/deployment.yaml
-index 9fc3d3b..81bcedc 100644
+index 9fc3d3b..c819c90 100644
 --- a/kiali-server/templates/deployment.yaml
 +++ b/kiali-server/templates/deployment.yaml
-@@ -101,8 +101,11 @@ spec:
-             {{- else }}
-             scheme: HTTP
+@@ -103,6 +103,9 @@ spec:
              {{- end }}
-+          failureThreshold: {{ .Values.deployment.probes.readiness.failure_threshold | int | default 3 }}
            initialDelaySeconds: {{ .Values.deployment.probes.readiness.initial_delay_seconds | int | default 5 }}
            periodSeconds: {{ .Values.deployment.probes.readiness.period_seconds | int | default 30 }}
++          failureThreshold: {{ .Values.deployment.probes.readiness.failure_threshold | int | default 3 }}
 +          successThreshold: {{ .Values.deployment.probes.readiness.success_threshold | int | default 1 }}
 +          timeoutSeconds: {{ .Values.deployment.probes.readiness.timeout_seconds | int | default 5 }}
          livenessProbe:
            httpGet:
              path: {{ include "kiali-server.server.web_root" . | trimSuffix "/"  }}/healthz
-@@ -112,8 +115,11 @@ spec:
-             {{- else }}
-             scheme: HTTP
+@@ -114,6 +117,9 @@ spec:
              {{- end }}
-+          failureThreshold: {{ .Values.deployment.probes.liveness.failure_threshold | int | default 3 }}
            initialDelaySeconds: {{ .Values.deployment.probes.liveness.initial_delay_seconds | int | default 5 }}
            periodSeconds: {{ .Values.deployment.probes.liveness.period_seconds | int | default 30 }}
++          failureThreshold: {{ .Values.deployment.probes.liveness.failure_threshold | int | default 3 }}
 +          successThreshold: {{ .Values.deployment.probes.liveness.success_threshold | int | default 1 }}
 +          timeoutSeconds: {{ .Values.deployment.probes.liveness.timeout_seconds | int | default 5 }}
          startupProbe:
            httpGet:
              path: {{ include "kiali-server.server.web_root" . | trimSuffix "/"  }}/healthz
 diff --git a/kiali-server/values.yaml b/kiali-server/values.yaml
-index 3c06887..606ef9c 100644
+index 69b5e39..f3f0d3e 100644
 --- a/kiali-server/values.yaml
 +++ b/kiali-server/values.yaml
-@@ -73,11 +73,17 @@ deployment:
-   priority_class_name: ""
-   probes:
+@@ -25,9 +25,9 @@ kiali_route_url: ""
+ #
+ 
+ additional_display_details:
+-- annotation: kiali.io/api-spec
+-  icon_annotation: kiali.io/api-type
+-  title: API Documentation
++  - annotation: kiali.io/api-spec
++    icon_annotation: kiali.io/api-type
++    title: API Documentation
+ 
+ auth:
+   openid: {}
+@@ -88,9 +88,15 @@ deployment:
      liveness:
-+      failure_threshold: 3
        initial_delay_seconds: 5
        period_seconds: 30
++      failure_threshold: 3
 +      success_threshold: 1
 +      timeout_seconds: 5
      readiness:
-+      failure_threshold: 3
        initial_delay_seconds: 5
        period_seconds: 30
++      failure_threshold: 3
 +      success_threshold: 1
 +      timeout_seconds: 5
      startup:
        failure_threshold: 6
        initial_delay_seconds: 30
 -- 
-2.34.1
+2.43.0
 

@@ -17,7 +17,7 @@ cni:
     - kube-system
     - istio-operator
     - istio-system
-  image: docker.io/istio/install-cni:1.26.2
+  image: docker.io/istio/install-cni:1.28.1
   k8s:
     readinessProbe:
       failureThreshold: 30
@@ -29,6 +29,6 @@ global:
   imagePullSecrets:
     - default-registry-key
   proxy:
-    image: docker.io/istio/proxyv2:1.26.2
+    image: docker.io/istio/proxyv2:1.28.1
   proxy_init:
-    image: docker.io/istio/proxyv2:1.26.2
+    image: docker.io/istio/proxyv2:1.28.1

@@ -1,10 +1,10 @@
 ---
 debname: kiali-helm
-debver: 2.11-1
+debver: 2.18-1
 dl_path:
-  name: helm-charts-kiali-2.11.0.tar.gz
-  url: https://github.com/kiali/helm-charts/archive/refs/tags/v2.11.0.tar.gz
-  sha256sum: 7ccd6db318de208afef5534e97232267be7c9752d71ae71ea752900b9d6e3b16
+  name: helm-charts-kiali-2.18.0.tar.gz
+  url: https://github.com/kiali/helm-charts/archive/refs/tags/v2.18.0.tar.gz
+  sha256sum: d0dc762019299ae5492f22455fe675e34a3336623a91a1dcaf4d0256f9f884ce
 revision:
   dist: $STX_DIST
   stx_patch: 0

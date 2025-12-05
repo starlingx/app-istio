@@ -1,10 +1,10 @@
 ---
 debname: istio-egressgateway-helm
-debver: 1.26-2
+debver: 1.28-1
 dl_path:
-  name: helm-charts-istio-egressgateway-1.26.2.tar.gz
-  url: https://github.com/istio/istio/archive/refs/tags/1.26.2.tar.gz
-  sha256sum: fb3b3569165e8b1cf01c676b7ce9a903abf730446df7e2753f436072aefbfd5e
+  name: helm-charts-istio-egressgateway-1.28.1.tar.gz
+  url: https://github.com/istio/istio/archive/refs/tags/1.28.1.tar.gz
+  sha256sum: 4bcf34078d5a24991027b692d2490582648605efdfb34b6c6c0603ee1f0c7735
 src_files:
   - files/Makefile
 revision:
