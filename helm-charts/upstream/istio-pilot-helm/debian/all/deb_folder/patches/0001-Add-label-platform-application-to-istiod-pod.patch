@@ -1,0 +1,44 @@
+From cf878430d9e26bfdbc4f228aa663e0f5c50e564a Mon Sep 17 00:00:00 2001
+From: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
+Date: Thu, 1 Jan 2026 23:56:45 -0500
+Subject: [PATCH] Add label platform/application to istiod pod
+
+---
+ templates/deployment.yaml | 2 ++
+ values.yaml               | 3 +++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/templates/deployment.yaml b/templates/deployment.yaml
+index 089ac44..21e1493 100644
+--- a/templates/deployment.yaml
++++ b/templates/deployment.yaml
+@@ -59,10 +59,12 @@ spec:
+         istio.io/dataplane-mode: none
+         app.kubernetes.io/name: "istiod"
+         {{- include "istio.labels" . | nindent 8 }}
++        app.starlingx.io/component: {{ ternary "application" "platform" (eq .Values.component "application") }}
+       annotations:
+         prometheus.io/port: "15014"
+         prometheus.io/scrape: "true"
+         sidecar.istio.io/inject: "false"
++        configchecksum: {{ .Values.component | quote | sha256sum }}  
+         {{- if .Values.podAnnotations }}
+ {{ toYaml .Values.podAnnotations | indent 8 }}
+         {{- end }}
+diff --git a/values.yaml b/values.yaml
+index ea5cc96..d6115d2 100644
+--- a/values.yaml
++++ b/values.yaml
+@@ -98,6 +98,9 @@ _internal_defaults_do_not_set:
+   # Additional labels to apply on the pod level for monitoring and logging configuration.
+   podLabels: {}
+ 
++  # App Label
++  component: platform
++  
+   # Setup how istiod Service is configured. See https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services
+   ipFamilyPolicy: ""
+   ipFamilies: []
+-- 
+2.34.1
+

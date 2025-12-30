@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2024-2025 Wind River Systems, Inc.
+# Copyright (c) 2024-2026 Wind River Systems, Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -12,6 +12,10 @@ deployment:
   image_version: v2.18.0
   version_label: v2.18.0
   service_type: NodePort
+  resources:
+    requests:
+      cpu: "0m"
+      memory: "0Mi"
   probes:
     liveness:
       failure_threshold: 3

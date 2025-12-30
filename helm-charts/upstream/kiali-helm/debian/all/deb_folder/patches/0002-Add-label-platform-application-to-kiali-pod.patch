@@ -1,0 +1,45 @@
+From 649bcb8f3d0562f2594b233d728d43e48a7c64fc Mon Sep 17 00:00:00 2001
+From: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
+Date: Tue, 6 Jan 2026 11:17:15 -0500
+Subject: [PATCH] Add label platform/application to kiali-pod
+
+Signed-off-by: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
+---
+ kiali-server/templates/deployment.yaml | 2 ++
+ kiali-server/values.yaml               | 3 +++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/kiali-server/templates/deployment.yaml b/kiali-server/templates/deployment.yaml
+index 9fc3d3b..5ba6691 100644
+--- a/kiali-server/templates/deployment.yaml
++++ b/kiali-server/templates/deployment.yaml
+@@ -24,10 +24,12 @@ spec:
+       name: {{ include "kiali-server.fullname" . }}
+       labels:
+         {{- include "kiali-server.labels" . | nindent 8 }}
++        app.starlingx.io/component: {{ ternary "application" "platform" (eq .Values.component "application") }}
+         {{- if .Values.deployment.pod_labels }}
+         {{- toYaml .Values.deployment.pod_labels | nindent 8 }}
+         {{- end }}
+       annotations:
++        configchecksum: {{ .Values.component | quote | sha256sum }}
+         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+         {{- if .Values.server.observability.metrics.enabled }}
+         prometheus.io/scrape: "true"
+diff --git a/kiali-server/values.yaml b/kiali-server/values.yaml
+index 69b5e39..c66ed9f 100644
+--- a/kiali-server/values.yaml
++++ b/kiali-server/values.yaml
+@@ -40,6 +40,9 @@ clustering:
+     label: "kiali.io/multiCluster=true"
+   clusters: []
+ 
++# App Label
++component: platform
++
+ deployment:
+   additional_service_yaml: {}
+   affinity:
+-- 
+2.34.1
+

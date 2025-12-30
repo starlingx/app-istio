@@ -1,1 +1,2 @@
 0001-liveness-and-readiness-probes-update.patch
+0002-Add-label-platform-application-to-kiali-pod.patch

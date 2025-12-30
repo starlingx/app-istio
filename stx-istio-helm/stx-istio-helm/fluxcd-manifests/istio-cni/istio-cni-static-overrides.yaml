@@ -1,10 +1,8 @@
 #
-# Copyright (c) 2025 Wind River Systems, Inc.
+# Copyright (c) 2025-2026 Wind River Systems, Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-
-app.starlingx.io/component: platform
 
 #  cniBinDir: /opt/cni/bin is the default value in the istio-cni chart.
 #  We override it to /var/opt/cni/bin because istio-pilot expects it there
@@ -25,6 +23,10 @@ cni:
       periodSeconds: 10
       successThreshold: 1
       timeoutSeconds: 5
+  resources:
+    requests:
+      cpu: 0m
+      memory: 0Mi
 global:
   imagePullSecrets:
     - default-registry-key
