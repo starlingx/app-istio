@@ -1,0 +1,33 @@
+#!/usr/bin/make -f
+# export DH_VERBOSE = 1
+
+export ROOT = debian/tmp
+export CHART_FOLDER = $(ROOT)/usr/lib/helm
+
+export DEB_VERSION = $(shell dpkg-parsechangelog | egrep '^Version:' | cut -f 2 -d ' ')
+export PATCH_VERSION = $(shell echo $(DEB_VERSION) | cut -f 4 -d '.')
+export CHART_BASE_VERSION = $(shell echo $(DEB_VERSION) | sed 's/-/./' | cut -d '.' -f 1-3)
+export CHART_VERSION = $(CHART_BASE_VERSION)+STX.$(PATCH_VERSION)
+
+%:
+	dh $@
+
+override_dh_auto_build:
+
+	mkdir -p istio-egressgateway
+
+	# We are picking the istio-egress chart from istio repository.
+	# Other plugins directly have their own tgz to pull
+	# istio-egress and ingress don't have it.
+	# For more clarity look at meta_data.yaml
+	cp -r manifests/charts/gateways/istio-egress/* istio-egressgateway
+
+	# Create the TGZ file.
+	make CHART_VERSION=$(CHART_VERSION) istio-egressgateway
+
+override_dh_auto_install:
+	# Install the app tar file.
+	install -d -m 755 $(CHART_FOLDER)
+	install -p -D -m 755 istio-egress*.tgz $(CHART_FOLDER)
+
+override_dh_auto_test:

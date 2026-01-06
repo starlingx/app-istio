@@ -1,0 +1,15 @@
+---
+debname: istio-pilot-helm
+debver: 1.28-1
+dl_path:
+  name: helm-charts-istio-pilot-1.28.1.tar.gz
+  url: https://storage.googleapis.com/istio-release/releases/1.28.1/helm/istiod-1.28.1.tgz
+  sha256sum: 6c9a739aa4840e6da13ad9cd38fc663058c24040c26d45d91a8aa3dbd816189c
+src_files:
+  - files/Makefile
+revision:
+  dist: $STX_DIST
+  stx_patch: -1
+  GITREVCOUNT:
+    SRC_DIR: ${MY_REPO}/stx/app-istio/helm-charts/upstream/istio-pilot-helm
+    BASE_SRCREV: c475992c932268dcf7fe197c693512190781ff29

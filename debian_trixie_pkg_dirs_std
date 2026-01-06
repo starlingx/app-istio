@@ -1,0 +1,8 @@
+helm-charts/upstream/istio-base-helm
+helm-charts/upstream/istio-cni-helm
+helm-charts/upstream/istio-pilot-helm
+helm-charts/upstream/istio-ingressgateway-helm
+helm-charts/upstream/istio-egressgateway-helm
+helm-charts/upstream/kiali-helm
+python3-k8sapp-istio
+stx-istio-helm

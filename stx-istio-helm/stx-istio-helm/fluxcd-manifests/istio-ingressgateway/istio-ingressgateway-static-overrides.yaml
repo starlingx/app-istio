@@ -1,0 +1,26 @@
+#
+# Copyright (c) 2025 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+gateways:
+  istio-ingressgateway:
+    enabled: true
+    # Can be changed to ClusterIP or LoadBalancer if need be using Overrides
+    # Note: LoadBalancer requires Service IP, StarlingX doesn't set it automatically.
+    type: NodePort
+    readinessProbe:
+      failureThreshold: 30
+      initialDelaySeconds: 1
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+
+global:
+  imagePullSecrets:
+    - default-registry-key
+  proxy:
+    image: docker.io/istio/proxyv2:1.28.1
+  proxy_init:
+    image: docker.io/istio/proxyv2:1.28.1

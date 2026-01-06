@@ -1,0 +1,34 @@
+#
+# Copyright (c) 2025 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+app.starlingx.io/component: platform
+
+#  cniBinDir: /opt/cni/bin is the default value in the istio-cni chart.
+#  We override it to /var/opt/cni/bin because istio-pilot expects it there
+cni:
+  chained: false
+  cniBinDir: /var/opt/cni/bin
+  cniConfDir: /etc/cni/net.d
+  cniConfFileName: istio-cni.conf
+  excludeNamespaces:
+    - kube-system
+    - istio-operator
+    - istio-system
+  image: docker.io/istio/install-cni:1.28.1
+  k8s:
+    readinessProbe:
+      failureThreshold: 30
+      initialDelaySeconds: 1
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+global:
+  imagePullSecrets:
+    - default-registry-key
+  proxy:
+    image: docker.io/istio/proxyv2:1.28.1
+  proxy_init:
+    image: docker.io/istio/proxyv2:1.28.1

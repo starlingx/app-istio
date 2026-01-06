@@ -1,29 +1,27 @@
 #
-# Copyright (c) 2024 Wind River Systems, Inc.
+# Copyright (c) 2024-2025 Wind River Systems, Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
 
 replicaCount: 1
 namespace: istio-system
-images:
-  tags:
-    kiali: quay.io/kiali/kiali:v1.85.0
 deployment:
-  image_name: registry.local:9001/quay.io/kiali/kiali
+  image_name: quay.io/kiali/kiali
   image_pull_secrets: ["default-registry-key"]
-  image_version: v1.85.0
-  version_label: v1.85.0
+  image_version: v2.18.0
+  version_label: v2.18.0
   service_type: NodePort
-  livenessProbe:
-    failureThreshold: 3
-    initialDelaySeconds: 5
-    periodSeconds: 30
-    successThreshold: 1
-    timeoutSeconds: 5
-  readinessProbe:
-    failureThreshold: 3
-    initialDelaySeconds: 5
-    periodSeconds: 30
-    successThreshold: 1
-    timeoutSeconds: 5
+  probes:
+    liveness:
+      failure_threshold: 3
+      initial_delay_seconds: 5
+      period_seconds: 30
+      success_threshold: 1
+      timeout_seconds: 5
+    readiness:
+      failure_threshold: 3
+      initial_delay_seconds: 5
+      period_seconds: 30
+      success_threshold: 1
+      timeout_seconds: 5

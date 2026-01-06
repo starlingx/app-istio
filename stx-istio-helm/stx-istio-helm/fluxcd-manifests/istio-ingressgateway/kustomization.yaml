@@ -1,0 +1,18 @@
+#
+# Copyright (c) 2025 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+namespace: istio-system
+resources:
+  - helmrelease.yaml
+secretGenerator:
+  - name: istio-ingressgateway-static-overrides
+    files:
+      - istio-ingressgateway-static-overrides.yaml
+  - name: istio-ingressgateway-system-overrides
+    files:
+      - istio-ingressgateway-system-overrides.yaml
+generatorOptions:
+  disableNameSuffixHash: true

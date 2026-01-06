@@ -1,0 +1,17 @@
+istio-base-helm (1.28-1) unstable; urgency=medium
+
+  * Update Istio Base chart version
+
+ -- mgianett <Mateus.GianettideJesus@windriver.com>  Fri, 05 Dec 2025 19:36:51 +0000
+
+istio-base-helm (1.26-2) unstable; urgency=medium
+
+  * Update Istio base chart version
+
+ --  Aman Pandae <amanpandae.mothukuri@windriver.com>  Mon, 15 Jul 2025 06:42:17 +0000
+
+istio-base-helm (1.22-1) unstable; urgency=medium
+
+  * Initial Release, removing dependency on Istio Operator
+
+ --  Aman Pandae <amanpandae.mothukuri@windriver.com>  Fri, 04 Jul 2025 06:42:17 +0000
