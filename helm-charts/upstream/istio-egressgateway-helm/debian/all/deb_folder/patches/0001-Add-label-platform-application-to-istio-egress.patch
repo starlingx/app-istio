@@ -1,0 +1,46 @@
+From 8c43c58da454cde265cbcc2f2d020364d5ad5e13 Mon Sep 17 00:00:00 2001
+From: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
+Date: Fri, 9 Jan 2026 11:15:52 -0500
+Subject: [PATCH] Add label platform/application to istio-egress
+
+---
+ .../charts/gateways/istio-egress/templates/deployment.yaml      | 2 ++
+ manifests/charts/gateways/istio-egress/values.yaml              | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/manifests/charts/gateways/istio-egress/templates/deployment.yaml b/manifests/charts/gateways/istio-egress/templates/deployment.yaml
+index 1d8b499..9f2d5f8 100644
+--- a/manifests/charts/gateways/istio-egress/templates/deployment.yaml
++++ b/manifests/charts/gateways/istio-egress/templates/deployment.yaml
+@@ -51,6 +51,7 @@ spec:
+         # are deprecated versus the `gateway` chart and don't separate selectorLabels from labels.
+         istio.io/dataplane-mode: none
+         {{- include "istio.labels" . | nindent 8 }}
++        app.starlingx.io/component: {{ ternary "application" "platform" (eq $gateway.component "application") }}
+       annotations:
+         istio.io/rev: {{ .Values.revision | default "default" | quote }}
+         {{- if .Values.meshConfig.enablePrometheusMerge }}
+@@ -59,6 +60,7 @@ spec:
+         prometheus.io/path: "/stats/prometheus"
+         {{- end }}
+         sidecar.istio.io/inject: "false"
++        configchecksum: {{ $gateway.component | quote | sha256sum }}
+ {{- if $gateway.podAnnotations }}
+ {{ toYaml $gateway.podAnnotations | indent 8 }}
+ {{ end }}
+diff --git a/manifests/charts/gateways/istio-egress/values.yaml b/manifests/charts/gateways/istio-egress/values.yaml
+index 37145a0..af2f801 100644
+--- a/manifests/charts/gateways/istio-egress/values.yaml
++++ b/manifests/charts/gateways/istio-egress/values.yaml
+@@ -106,6 +106,8 @@ _internal_defaults_do_not_set:
+       # The injection template to use for the gateway. If not set, no injection will be performed.
+       injectionTemplate: ""
+ 
++      # App Label
++      component: platform
+   # Revision is set as 'version' label and part of the resource names when installing multiple control planes.
+   revision: ""
+ 
+-- 
+2.34.1
+
