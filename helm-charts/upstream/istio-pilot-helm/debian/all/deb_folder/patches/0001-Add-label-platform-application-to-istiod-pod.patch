@@ -1,15 +1,16 @@
-From cf878430d9e26bfdbc4f228aa663e0f5c50e564a Mon Sep 17 00:00:00 2001
-From: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
-Date: Thu, 1 Jan 2026 23:56:45 -0500
-Subject: [PATCH] Add label platform/application to istiod pod
+From a02fb62fbb1b61125ab9de54ad632530edbd3da7 Mon Sep 17 00:00:00 2001
+From: mgianett <Mateus.GianettideJesus@windriver.com>
+Date: Thu, 30 Apr 2026 11:12:42 -0300
+Subject: [PATCH] Add-label-platform-application-to-istiod-pod
 
+Signed-off-by: mgianett <Mateus.GianettideJesus@windriver.com>
 ---
  templates/deployment.yaml | 2 ++
- values.yaml               | 3 +++
- 2 files changed, 5 insertions(+)
+ values.yaml               | 2 +
+ 2 files changed, 4 insertions(+)
 
 diff --git a/templates/deployment.yaml b/templates/deployment.yaml
-index 089ac44..21e1493 100644
+index 94e3e4e..928fb5f 100644
 --- a/templates/deployment.yaml
 +++ b/templates/deployment.yaml
 @@ -59,10 +59,12 @@ spec:
@@ -21,24 +22,20 @@ index 089ac44..21e1493 100644
          prometheus.io/port: "15014"
          prometheus.io/scrape: "true"
          sidecar.istio.io/inject: "false"
-+        configchecksum: {{ .Values.component | quote | sha256sum }}  
++        configchecksum: {{ .Values.component | quote | sha256sum }}
          {{- if .Values.podAnnotations }}
  {{ toYaml .Values.podAnnotations | indent 8 }}
          {{- end }}
 diff --git a/values.yaml b/values.yaml
-index ea5cc96..d6115d2 100644
+index 41dff2d..7bc5eab 100644
 --- a/values.yaml
 +++ b/values.yaml
-@@ -98,6 +98,9 @@ _internal_defaults_do_not_set:
-   # Additional labels to apply on the pod level for monitoring and logging configuration.
-   podLabels: {}
- 
-+  # App Label
+@@ -586,3 +586,5 @@ _internal_defaults_do_not_set:
+     # -- Eviction policy for unhealthy pods guarded by PodDisruptionBudget.
+     # Ref: https://kubernetes.io/blog/2023/01/06/unhealthy-pod-eviction-policy-for-pdbs/
+     unhealthyPodEvictionPolicy: ""
++  # StarlingX App Label
 +  component: platform
-+  
-   # Setup how istiod Service is configured. See https://kubernetes.io/docs/concepts/services-networking/dual-stack/#services
-   ipFamilyPolicy: ""
-   ipFamilies: []
 -- 
-2.34.1
+2.43.0
 

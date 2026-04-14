@@ -1,19 +1,19 @@
-From 649bcb8f3d0562f2594b233d728d43e48a7c64fc Mon Sep 17 00:00:00 2001
-From: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
-Date: Tue, 6 Jan 2026 11:17:15 -0500
-Subject: [PATCH] Add label platform/application to kiali-pod
+From 679a2717192fa7cc63473bbf2c974f00eb1e46d1 Mon Sep 17 00:00:00 2001
+From: mgianett <Mateus.GianettideJesus@windriver.com>
+Date: Thu, 30 Apr 2026 11:42:13 -0300
+Subject: [PATCH] Add-label-platform-application-to-kiali-pod
 
-Signed-off-by: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
+Signed-off-by: mgianett <Mateus.GianettideJesus@windriver.com>
 ---
  kiali-server/templates/deployment.yaml | 2 ++
  kiali-server/values.yaml               | 3 +++
  2 files changed, 5 insertions(+)
 
 diff --git a/kiali-server/templates/deployment.yaml b/kiali-server/templates/deployment.yaml
-index 9fc3d3b..5ba6691 100644
+index 16ade98..89f763d 100644
 --- a/kiali-server/templates/deployment.yaml
 +++ b/kiali-server/templates/deployment.yaml
-@@ -24,10 +24,12 @@ spec:
+@@ -28,10 +28,12 @@ spec:
        name: {{ include "kiali-server.fullname" . }}
        labels:
          {{- include "kiali-server.labels" . | nindent 8 }}
@@ -27,10 +27,10 @@ index 9fc3d3b..5ba6691 100644
          {{- if .Values.server.observability.metrics.enabled }}
          prometheus.io/scrape: "true"
 diff --git a/kiali-server/values.yaml b/kiali-server/values.yaml
-index 69b5e39..c66ed9f 100644
+index fa0711f..ad509c8 100644
 --- a/kiali-server/values.yaml
 +++ b/kiali-server/values.yaml
-@@ -40,6 +40,9 @@ clustering:
+@@ -52,6 +52,9 @@ clustering:
      label: "kiali.io/multiCluster=true"
    clusters: []
  
@@ -38,8 +38,8 @@ index 69b5e39..c66ed9f 100644
 +component: platform
 +
  deployment:
-   additional_service_yaml: {}
-   affinity:
+   # The helm chart will apply a restrictive security context to user-defined containers and initContainers
+   # and will prevent write access to secret-backed volumes. These restrictions cannot be overridden.
 -- 
-2.34.1
+2.43.0
 

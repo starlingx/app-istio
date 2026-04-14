@@ -1,15 +1,16 @@
-From 8c43c58da454cde265cbcc2f2d020364d5ad5e13 Mon Sep 17 00:00:00 2001
-From: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
-Date: Fri, 9 Jan 2026 11:15:52 -0500
-Subject: [PATCH] Add label platform/application to istio-egress
+From 1903d75b2c47db808b66a282bcaac697a4355334 Mon Sep 17 00:00:00 2001
+From: Mateus Gianetti de Jesus <Mateus.GianettideJesus@windriver.com>
+Date: Thu, 30 Apr 2026 15:13:44 -0300
+Subject: [PATCH] Add-label-platform-application-to-istio-egress
 
+Signed-off-by: Mateus Gianetti de Jesus <Mateus.GianettideJesus@windriver.com>
 ---
  .../charts/gateways/istio-egress/templates/deployment.yaml      | 2 ++
- manifests/charts/gateways/istio-egress/values.yaml              | 2 ++
+ manifests/charts/gateways/istio-egress/values.yaml              | 2 +
  2 files changed, 4 insertions(+)
 
 diff --git a/manifests/charts/gateways/istio-egress/templates/deployment.yaml b/manifests/charts/gateways/istio-egress/templates/deployment.yaml
-index 1d8b499..9f2d5f8 100644
+index 5d41254..43162c4 100644
 --- a/manifests/charts/gateways/istio-egress/templates/deployment.yaml
 +++ b/manifests/charts/gateways/istio-egress/templates/deployment.yaml
 @@ -51,6 +51,7 @@ spec:
@@ -29,18 +30,18 @@ index 1d8b499..9f2d5f8 100644
  {{ toYaml $gateway.podAnnotations | indent 8 }}
  {{ end }}
 diff --git a/manifests/charts/gateways/istio-egress/values.yaml b/manifests/charts/gateways/istio-egress/values.yaml
-index 37145a0..af2f801 100644
+index 37145a0..d2f6677 100644
 --- a/manifests/charts/gateways/istio-egress/values.yaml
 +++ b/manifests/charts/gateways/istio-egress/values.yaml
 @@ -106,6 +106,8 @@ _internal_defaults_do_not_set:
        # The injection template to use for the gateway. If not set, no injection will be performed.
        injectionTemplate: ""
  
-+      # App Label
++      # StarlingX App Label
 +      component: platform
    # Revision is set as 'version' label and part of the resource names when installing multiple control planes.
    revision: ""
  
 -- 
-2.34.1
+2.43.0
 

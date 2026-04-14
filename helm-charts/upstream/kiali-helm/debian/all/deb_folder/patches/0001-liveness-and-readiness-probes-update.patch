@@ -1,18 +1,19 @@
-From 1b2d52206769bfc25506dc40dcdab2c25255cbb5 Mon Sep 17 00:00:00 2001
-From: Test User <test@example.com>
-Date: Fri, 5 Dec 2025 16:36:57 -0300
+From a0f4fb1aa2c419f1074c797b55af7487fb09918c Mon Sep 17 00:00:00 2001
+From: mgianett <Mateus.GianettideJesus@windriver.com>
+Date: Thu, 30 Apr 2026 11:42:13 -0300
 Subject: [PATCH] liveness-and-readiness-probes-update
 
+Signed-off-by: mgianett <Mateus.GianettideJesus@windriver.com>
 ---
  kiali-server/templates/deployment.yaml |  6 ++++++
- kiali-server/values.yaml               | 12 +++++++++---
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ kiali-server/values.yaml               | 16 +++++++++++-----
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
 diff --git a/kiali-server/templates/deployment.yaml b/kiali-server/templates/deployment.yaml
-index 9fc3d3b..c819c90 100644
+index 8bb0154..16ade98 100644
 --- a/kiali-server/templates/deployment.yaml
 +++ b/kiali-server/templates/deployment.yaml
-@@ -103,6 +103,9 @@ spec:
+@@ -116,6 +116,9 @@ spec:
              {{- end }}
            initialDelaySeconds: {{ .Values.deployment.probes.readiness.initial_delay_seconds | int | default 5 }}
            periodSeconds: {{ .Values.deployment.probes.readiness.period_seconds | int | default 30 }}
@@ -22,7 +23,7 @@ index 9fc3d3b..c819c90 100644
          livenessProbe:
            httpGet:
              path: {{ include "kiali-server.server.web_root" . | trimSuffix "/"  }}/healthz
-@@ -114,6 +117,9 @@ spec:
+@@ -127,6 +130,9 @@ spec:
              {{- end }}
            initialDelaySeconds: {{ .Values.deployment.probes.liveness.initial_delay_seconds | int | default 5 }}
            periodSeconds: {{ .Values.deployment.probes.liveness.period_seconds | int | default 30 }}
@@ -33,10 +34,10 @@ index 9fc3d3b..c819c90 100644
            httpGet:
              path: {{ include "kiali-server.server.web_root" . | trimSuffix "/"  }}/healthz
 diff --git a/kiali-server/values.yaml b/kiali-server/values.yaml
-index 69b5e39..f3f0d3e 100644
+index 2c97383..fa0711f 100644
 --- a/kiali-server/values.yaml
 +++ b/kiali-server/values.yaml
-@@ -25,9 +25,9 @@ kiali_route_url: ""
+@@ -27,22 +27,22 @@ kiali_route_url: ""
  #
  
  additional_display_details:
@@ -49,7 +50,22 @@ index 69b5e39..f3f0d3e 100644
  
  auth:
    openid: {}
-@@ -88,9 +88,15 @@ deployment:
+   openshift: {}
+   strategy: ""
+ 
+-chat_ai:    
++chat_ai:
+   default_provider: ""
+   enabled: false
+   providers: []
+   store_config:
+     enabled: true
+-    max_cache_memory_mb: 1024      
++    max_cache_memory_mb: 1024
+     reduce_threshold: 15
+     reduce_with_ai: false
+ 
+@@ -120,9 +120,15 @@ deployment:
      liveness:
        initial_delay_seconds: 5
        period_seconds: 30
