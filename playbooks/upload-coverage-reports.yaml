@@ -1,0 +1,23 @@
+- hosts: all
+  tasks:
+    - name: Check coverage directory exists
+      stat:
+        path: "{{ zuul.project.src_dir }}/python3-k8sapp-istio/k8sapp_istio/UTCoverage/"
+      register: coverage_dir_stat
+
+    - name: Upload coverage reports
+      synchronize:
+        src: "{{ zuul.project.src_dir }}/python3-k8sapp-istio/k8sapp_istio/UTCoverage/"
+        dest: "{{ zuul.executor.log_root }}/coverage/"
+        mode: pull
+      when: coverage_dir_stat.stat.exists
+      failed_when: false
+
+    - name: Return coverage report artifact
+      zuul_return:
+        data:
+          zuul:
+            artifacts:
+              - name: "Coverage Report"
+                url: "coverage/index.html"
+      when: coverage_dir_stat.stat.exists

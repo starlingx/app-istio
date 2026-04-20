@@ -1,0 +1,23 @@
+- hosts: all
+  tasks:
+    - name: Check linter reports directory exists
+      stat:
+        path: "{{ zuul.project.src_dir }}/UTCoverage/"
+      register: linter_dir_stat
+
+    - name: Upload linter reports
+      synchronize:
+        src: "{{ zuul.project.src_dir }}/UTCoverage/"
+        dest: "{{ zuul.executor.log_root }}/linters/"
+        mode: pull
+      when: linter_dir_stat.stat.exists
+      failed_when: false
+
+    - name: Return linter report artifact
+      zuul_return:
+        data:
+          zuul:
+            artifacts:
+              - name: "Linter Report"
+                url: "linters/lint_report.txt"
+      when: linter_dir_stat.stat.exists

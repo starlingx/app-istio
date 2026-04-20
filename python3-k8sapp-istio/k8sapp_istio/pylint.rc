@@ -66,6 +66,7 @@ disable=
  R0022, # useless-option-value !!!
  R0205, # useless-object-inheritance
  R0402, # consider-using-from-import
+ R0801, # duplicate-code
  R0901, # too-many-ancestors
  R0902, # too-many-instance-attributes
  R0903, # too-few-public-methods
@@ -76,6 +77,7 @@ disable=
  R0914, # too-many-locals
  R0915, # too-many-statements
  R0916, # too-many-boolean-expressions
+ R0917, # too-many-positional-arguments
  R1702, # too-many-nested-blocks
  R1703, # simplifiable-if-statement
  R1704, # redefined-argument-from-local !!!
@@ -171,7 +173,7 @@ evaluation=10.0 - ((float(5 * error + warning + refactor + convention) / stateme
 
 [SIMILARITIES]
 # Minimum lines number of a similarity.
-min-similarity-lines=4
+min-similarity-lines=20
 
 # Ignore comments when computing similarities.
 ignore-comments=yes
