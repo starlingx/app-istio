@@ -9,8 +9,8 @@ namespace: istio-system
 deployment:
   image_name: quay.io/kiali/kiali
   image_pull_secrets: ["default-registry-key"]
-  image_version: v2.18.0
-  version_label: v2.18.0
+  image_version: v2.24.0
+  version_label: v2.24.0
   service_type: NodePort
   resources:
     requests:

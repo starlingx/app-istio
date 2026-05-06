@@ -1,19 +1,16 @@
-From a431db3cd256312a57ce1d5dec9d70dd1e65d86f Mon Sep 17 00:00:00 2001
-From: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
-Date: Tue, 30 Dec 2025 05:24:52 -0500
-Subject: [PATCH] Add support to 'app.starlingx.io/component' to be overwritten
- by user override, with possible values being 'platform' and 'application'.
- With 'platform' being the default value. This change will also restart the
- pods if the label in namespace change.
+From 1f6d77f664e7b157527c9917d82fcf2abd02861d Mon Sep 17 00:00:00 2001
+From: mgianett <Mateus.GianettideJesus@windriver.com>
+Date: Thu, 30 Apr 2026 11:12:41 -0300
+Subject: [PATCH] Add-support-to-app.starlingx.io-component
 
-Signed-off-by: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
+Signed-off-by: mgianett <Mateus.GianettideJesus@windriver.com>
 ---
  templates/daemonset.yaml | 2 ++
- values.yaml              | 3 +++
- 2 files changed, 5 insertions(+)
+ values.yaml              | 2 +
+ 2 files changed, 4 insertions(+)
 
 diff --git a/templates/daemonset.yaml b/templates/daemonset.yaml
-index 3b49c0e..fc6cac5 100644
+index f8addb8..666c13c 100644
 --- a/templates/daemonset.yaml
 +++ b/templates/daemonset.yaml
 @@ -46,6 +46,7 @@ spec:
@@ -33,19 +30,15 @@ index 3b49c0e..fc6cac5 100644
  {{ toYaml .Values.podAnnotations | indent 8 }}
          {{- end }}
 diff --git a/values.yaml b/values.yaml
-index d7caeee..259223d 100644
+index 4979599..56159f9 100644
 --- a/values.yaml
 +++ b/values.yaml
-@@ -43,6 +43,9 @@ _internal_defaults_do_not_set:
-   # Additional labels to apply on the pod level
-   podLabels: {}
-
-+  # App label
+@@ -202,3 +202,5 @@ _internal_defaults_do_not_set:
+ 
+   # A `key: value` mapping of environment variables to add to the pod
+   env: {}
++  # StarlingX App Label
 +  component: platform
-+
-   # Deploy the config files as plugin chain (value "true") or as standalone files in the conf dir (value "false")?
-   # Some k8s flavors (e.g. OpenShift) do not support the chain approach, set to false if this is the case
-   chained: true
---
-2.34.1
+-- 
+2.43.0
 

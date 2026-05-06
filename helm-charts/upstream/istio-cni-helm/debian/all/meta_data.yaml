@@ -1,10 +1,10 @@
 ---
 debname: istio-cni-helm
-debver: 1.28-3
+debver: 1.29-2
 dl_path:
-  name: helm-charts-istio-cni-1.28.3.tar.gz
-  url: https://storage.googleapis.com/istio-release/releases/1.28.3/helm/cni-1.28.3.tgz
-  sha256sum: c358761c71e1865eea46b858ea8e518b79d0bb66343955353ba665569102b56a
+  name: helm-charts-istio-cni-1.29.2.tar.gz
+  url: https://storage.googleapis.com/istio-release/releases/1.29.2/helm/cni-1.29.2.tgz
+  sha256sum: 93a1bb04518059d8f74025367a7c37d2581c0705e2a47bd1cca447ab86633b34
 src_files:
   - files/Makefile
 revision:

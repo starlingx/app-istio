@@ -1,15 +1,16 @@
-From d16dcc5a65b4c95bd461ade3309c00c4949c8c5d Mon Sep 17 00:00:00 2001
-From: Aman Pandae <AmanPandae.Mothukuri@windriver.com>
-Date: Fri, 9 Jan 2026 10:56:02 -0500
-Subject: [PATCH] Add label platform/application to istio-ingress
+From 55b7e3d7c46ace13cf6de9a3b2f81c5b0ad4b72f Mon Sep 17 00:00:00 2001
+From: Mateus Gianetti de Jesus <Mateus.GianettideJesus@windriver.com>
+Date: Thu, 30 Apr 2026 15:13:51 -0300
+Subject: [PATCH] Add-label-platform-application-to-istio-ingress
 
+Signed-off-by: Mateus Gianetti de Jesus <Mateus.GianettideJesus@windriver.com>
 ---
- .../charts/gateways/istio-ingress/templates/deployment.yaml    | 2 ++
- manifests/charts/gateways/istio-ingress/values.yaml            | 3 +++
- 2 files changed, 5 insertions(+)
+ .../charts/gateways/istio-ingress/templates/deployment.yaml     | 2 ++
+ manifests/charts/gateways/istio-ingress/values.yaml             | 2 +
+ 2 files changed, 4 insertions(+)
 
 diff --git a/manifests/charts/gateways/istio-ingress/templates/deployment.yaml b/manifests/charts/gateways/istio-ingress/templates/deployment.yaml
-index 1c2ef17..8b3f7ad 100644
+index a7c9e4c..c07d83d 100644
 --- a/manifests/charts/gateways/istio-ingress/templates/deployment.yaml
 +++ b/manifests/charts/gateways/istio-ingress/templates/deployment.yaml
 @@ -51,6 +51,7 @@ spec:
@@ -29,19 +30,18 @@ index 1c2ef17..8b3f7ad 100644
  {{ toYaml $gateway.podAnnotations | indent 8 }}
  {{ end }}
 diff --git a/manifests/charts/gateways/istio-ingress/values.yaml b/manifests/charts/gateways/istio-ingress/values.yaml
-index 21d1102..83f241c 100644
+index 21d1102..c9b455f 100644
 --- a/manifests/charts/gateways/istio-ingress/values.yaml
 +++ b/manifests/charts/gateways/istio-ingress/values.yaml
-@@ -118,6 +118,9 @@ _internal_defaults_do_not_set:
+@@ -118,6 +118,8 @@ _internal_defaults_do_not_set:
        # The injection template to use for the gateway. If not set, no injection will be performed.
        injectionTemplate: ""
  
-+      # App Label
++      # StarlingX App Label
 +      component: platform
-+
    # Revision is set as 'version' label and part of the resource names when installing multiple control planes.
    revision: ""
  
 -- 
-2.34.1
+2.43.0
 

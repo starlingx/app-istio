@@ -1,10 +1,10 @@
 ---
 debname: istio-base-helm
-debver: 1.28-3
+debver: 1.29-2
 dl_path:
-  name: helm-charts-istio-base-1.28.3.tar.gz
-  url: https://storage.googleapis.com/istio-release/releases/1.28.3/helm/base-1.28.3.tgz
-  sha256sum: 041897734f40b651d17bbc40c0b6d8b463f81e010613a32002e6e1b52caa1e0b
+  name: helm-charts-istio-base-1.29.2.tar.gz
+  url: https://storage.googleapis.com/istio-release/releases/1.29.2/helm/base-1.29.2.tgz
+  sha256sum: d91cb59b82612dd35949233613b015e7eb7bd787871368d7db9a85c45b82237b
 src_files:
   - files/Makefile
 revision:

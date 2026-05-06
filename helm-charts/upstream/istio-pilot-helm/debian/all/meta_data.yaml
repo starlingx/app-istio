@@ -1,10 +1,10 @@
 ---
 debname: istio-pilot-helm
-debver: 1.28-3
+debver: 1.29-2
 dl_path:
-  name: helm-charts-istio-pilot-1.28.3.tar.gz
-  url: https://storage.googleapis.com/istio-release/releases/1.28.3/helm/istiod-1.28.3.tgz
-  sha256sum: d182ba29d723f6ecba0e51efc1cb476d1a5221b11f3549fb00bc972f80c54caf
+  name: helm-charts-istio-pilot-1.29.2.tar.gz
+  url: https://storage.googleapis.com/istio-release/releases/1.29.2/helm/istiod-1.29.2.tgz
+  sha256sum: 27a325a48cebad6dbdb0afea485b124b2d3fe618378e98edd5bd9b6805a270e7
 src_files:
   - files/Makefile
 revision:
