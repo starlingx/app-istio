@@ -1,0 +1,122 @@
+From 8409617f778eacb07af04c7f5cec4843b7361c77 Mon Sep 17 00:00:00 2001
+From: amothuku <AmanPandae.Mothukuri@windriver.com>
+Date: Wed, 2 Sep 2026 04:50:00 +0000
+Subject: [PATCH] Exclude system namespaces from sidecar-injector webhooks
+
+The Istio sidecar-injector MutatingWebhookConfiguration uses
+failurePolicy: Fail and its webhooks can intercept pod CREATE requests
+in kube-system. On a single-node system, istiod runs on the same
+controller whose Kubernetes control plane is being upgraded. While the
+control plane is replaced, istiod is temporarily unreachable, so the
+kube-apiserver static-pod mirror pod CREATE is rejected by the webhook
+and kubeadm times out.
+
+Add a kubernetes.io/metadata.name NotIn exclusion for the control-plane
+system namespaces (kube-system, kube-public, kube-node-lease) to every
+sidecar-injector webhook namespaceSelector, in both the base and
+revision-tag MutatingWebhookConfigurations. System namespaces should
+never receive Istio sidecars.
+---
+ templates/mutatingwebhook.yaml   | 16 ++++++++++++++++
+ templates/revision-tags-mwc.yaml | 16 ++++++++++++++++
+ 2 files changed, 32 insertions(+)
+
+diff --git a/templates/mutatingwebhook.yaml b/templates/mutatingwebhook.yaml
+index 4c24ee7..1a0f18a 100644
+--- a/templates/mutatingwebhook.yaml
++++ b/templates/mutatingwebhook.yaml
+@@ -77,6 +77,10 @@ webhooks:
+       {{- end }}
+     - key: istio-injection
+       operator: DoesNotExist
++    {{- /* STX: never intercept pods in control-plane/system namespaces */}}
++    - key: "kubernetes.io/metadata.name"
++      operator: "NotIn"
++      values: ["kube-system","kube-public","kube-node-lease"]
+   objectSelector:
+     matchExpressions:
+     - key: sidecar.istio.io/inject
+@@ -92,6 +96,10 @@ webhooks:
+       operator: DoesNotExist
+     - key: istio-injection
+       operator: DoesNotExist
++    {{- /* STX: never intercept pods in control-plane/system namespaces */}}
++    - key: "kubernetes.io/metadata.name"
++      operator: "NotIn"
++      values: ["kube-system","kube-public","kube-node-lease"]
+   objectSelector:
+     matchExpressions:
+     - key: sidecar.istio.io/inject
+@@ -119,6 +127,10 @@ webhooks:
+       operator: In
+       values:
+       - enabled
++    {{- /* STX: never intercept pods in control-plane/system namespaces */}}
++    - key: "kubernetes.io/metadata.name"
++      operator: "NotIn"
++      values: ["kube-system","kube-public","kube-node-lease"]
+   objectSelector:
+     matchExpressions:
+     - key: sidecar.istio.io/inject
+@@ -134,6 +146,10 @@ webhooks:
+       operator: DoesNotExist
+     - key: istio.io/rev
+       operator: DoesNotExist
++    {{- /* STX: never intercept pods in control-plane/system namespaces */}}
++    - key: "kubernetes.io/metadata.name"
++      operator: "NotIn"
++      values: ["kube-system","kube-public","kube-node-lease"]
+   objectSelector:
+     matchExpressions:
+     - key: sidecar.istio.io/inject
+diff --git a/templates/revision-tags-mwc.yaml b/templates/revision-tags-mwc.yaml
+index ce40736..6a03a72 100644
+--- a/templates/revision-tags-mwc.yaml
++++ b/templates/revision-tags-mwc.yaml
+@@ -68,6 +68,10 @@ webhooks:
+       - "{{ $tagName }}"
+     - key: istio-injection
+       operator: DoesNotExist
++    {{- /* STX: never intercept pods in control-plane/system namespaces */}}
++    - key: "kubernetes.io/metadata.name"
++      operator: "NotIn"
++      values: ["kube-system","kube-public","kube-node-lease"]
+   objectSelector:
+     matchExpressions:
+     - key: sidecar.istio.io/inject
+@@ -81,6 +85,10 @@ webhooks:
+       operator: DoesNotExist
+     - key: istio-injection
+       operator: DoesNotExist
++    {{- /* STX: never intercept pods in control-plane/system namespaces */}}
++    - key: "kubernetes.io/metadata.name"
++      operator: "NotIn"
++      values: ["kube-system","kube-public","kube-node-lease"]
+   objectSelector:
+     matchExpressions:
+     - key: sidecar.istio.io/inject
+@@ -104,6 +112,10 @@ webhooks:
+       operator: In
+       values:
+       - enabled
++    {{- /* STX: never intercept pods in control-plane/system namespaces */}}
++    - key: "kubernetes.io/metadata.name"
++      operator: "NotIn"
++      values: ["kube-system","kube-public","kube-node-lease"]
+   objectSelector:
+     matchExpressions:
+     - key: sidecar.istio.io/inject
+@@ -119,6 +131,10 @@ webhooks:
+       operator: DoesNotExist
+     - key: istio.io/rev
+       operator: DoesNotExist
++    {{- /* STX: never intercept pods in control-plane/system namespaces */}}
++    - key: "kubernetes.io/metadata.name"
++      operator: "NotIn"
++      values: ["kube-system","kube-public","kube-node-lease"]
+   objectSelector:
+     matchExpressions:
+     - key: sidecar.istio.io/inject
+-- 
+2.34.1
+

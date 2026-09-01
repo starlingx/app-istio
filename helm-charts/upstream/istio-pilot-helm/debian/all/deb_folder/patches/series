@@ -1,1 +1,2 @@
 0001-Add-label-platform-application-to-istiod-pod.patch
+0002-Exclude-system-namespaces-from-sidecar-injector-webh.patch
